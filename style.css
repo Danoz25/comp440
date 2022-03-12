@@ -53,6 +53,17 @@ span{
     color: white;  
     font-size: 17px;  
 }  
+#register
+{
+    width: 300px;  
+    height: 30px;  
+    border: none;  
+    border-radius: 17px;  
+    padding-left: 7px;  
+    color: blue;  
+
+}
+
 a{  
     float: right;  
     background-color: grey;  

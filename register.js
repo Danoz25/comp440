@@ -46,5 +46,9 @@ router.post('/register', function(req, res, next) {
      
 });
         module.exports = router;
-    }
+
+    };
+    location.href = "http://127.0.0.1:5500/index.html";
+
+
 }

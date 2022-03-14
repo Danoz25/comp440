@@ -1,95 +1,132 @@
 <?php
+
+// MUST DOUBLE CHECK WEHRE ALL THE BRACKETS GO
     require_once('mysqli_connect.php');
 
-    $username = $password = $firstName = $lastName = $email = "";
+     $_username = $_password = $_firstName = $_lastName = $_email = "";
     $username_err = $password_err = $confirm_password_err = $firstName_err = $lastName_err = $email_err = "";
 
-    // Processing form data when form is submitted
-if($_SERVER["REQUEST_METHOD"] == "POST"){
- 
-    // Validate username
-    if(empty(trim($_POST["username"]))){
-        $username_err = "Please enter a username.";
-    } elseif(!preg_match('/^[a-zA-Z0-9_]+$/', trim($_POST["username"]))){
-        $username_err = "Username can only contain letters, numbers, and underscores.";
-    } else{
-        // Prepare a select statement
-        $sql = "SELECT id FROM user WHERE username = ?";
-        
-        if($stmt = mysqli_prepare($link, $sql)){
-            // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "s", $param_username);
-            
-            // Set parameters
-            $param_username = trim($_POST["username"]);
-            
-            // Attempt to execute the prepared statement
-            if(mysqli_stmt_execute($stmt)){
-                /* store result */
-                mysqli_stmt_store_result($stmt);
-                
-                if(mysqli_stmt_num_rows($stmt) == 1){
-                    $username_err = "This username is already taken.";
-                } else{
-                    $username = trim($_POST["username"]);
+    if(isset($_POST['submit']))
+    {
+    
+        $username  = $_POST["username"];
+        $password =$_POST["password"];
+        $firstName = $_POST["firsName"];
+        $lastName = $_POST["lastName"];
+        $email = $_POST["email"];
+
+        $email_check_query = mysqli_query($connection, "SELECT * FROM user WHERE email = '{$email}' ");
+        $rowCount = mysqli_num_rows($email_check_query);
+
+        if(empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($firstName) && empty($lastName) && empty($email))
+        {
+            // possible display an error message
+            if($rowCount > 0) {
+                $email_exist = '
+                    <div class="alert alert-danger" role="alert">
+                        User with email already exist!
+                    </div>
+                ';
+            } else {
+                 // clean the form data before sending to database
+                 $_username = mysqli_real_escape_string($connection, $username);
+                 $_password = mysqli_real_escape_string($connection, $password);
+                 $_firstName = mysqli_real_escape_string($connection, $firstName);
+                 $_lastName = mysqli_real_escape_string($connection, $lastName);
+                 $_email = mysqli_real_escape_string($connection, $email);
+
+                 if(!preg_match("/^[a-zA-Z ]*$/", $_username)) {
+                    $username_err = '<div class="alert alert-danger">
+                            Only letters and white space allowed.
+                        </div>';
                 }
-            } else{
-                echo "Oops! Something went wrong. Please try again later.";
-            }
-            mysqli_stmt_close($stmt);
+                if(!preg_match("/^(?=.*\d)(?=.*[@#\-_$%^&+=§!\?])(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z@#\-_$%^&+=§!\?]{4,20}$/", $_password)) {
+                    $password_err = '<div class="alert alert-danger">
+                             Password should be between 4 to 20 charcters long, contains atleast one special chacter, lowercase, uppercase and a digit.
+                        </div>';
+                }
+
+                if(!preg_match("/^[a-zA-Z ]*$/", $_firstName)) {
+                    $firstName_err = '<div class="alert alert-danger">
+                            Only letters and white space allowed.
+                        </div>';
+                }
+                if(!preg_match("/^[a-zA-Z ]*$/", $_lastName)) {
+                    $lastName_err = '<div class="alert alert-danger">
+                            Only letters and white space allowed.
+                        </div>';
+                }
+                if(!filter_var($_email, FILTER_VALIDATE_EMAIL)) {
+                    $email_err = '<div class="alert alert-danger">
+                            Email format is invalid.
+                        </div>';
+                }
+
+                // finished check all parameters for registering
+                if((preg_match("/^[a-zA-Z ]*$/", $_username)) && (preg_match("/^[a-zA-Z ]*$/", $_firstName)) && (preg_match("/^[a-zA-Z ]*$/", $_lastName)) &&
+                (filter_var($_email, FILTER_VALIDATE_EMAIL)) && (preg_match("/^(?=.*\d)(?=.*[@#\-_$%^&+=§!\?])(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z@#\-_$%^&+=§!\?]{4,20}$/", $_password)))
+                {
+
+                      // Generate random activation token
+                      $token = md5(rand().time());
+                      // Password hash
+                      $password_hash = password_hash($password, PASSWORD_BCRYPT);
+                      // Query
+                      $sql = "INSERT INTO user (username, password, firstname lastname, email, token, is_active,
+                      date_time) VALUES ('{$username}','{$password_hash}','{$firstname}', '{$lastname}', '{$email}', 
+                      '{$token}', '0', now())";
+                      
+                      // Create mysql query
+                      $sqlQuery = mysqli_query($connection, $sql);
+                      
+                      if(!$sqlQuery){
+                          die("MySQL query failed!" . mysqli_error($connection));
+                      } 
+                    // genearte tokens and create my sql query and password hash
+                }
+
+
+
         }
-    }
 
-    // Validate password
-      if(empty(trim($_POST["password"]))){
-        $password_err = "Please enter a password.";     
-    } elseif(strlen(trim($_POST["password"])) < 4){
-        $password_err = "Password must have atleast 4 characters.";
-    } else{
-        $password = trim($_POST["password"]);
-    }
 
-    //validate first name
-    if(empty(trim($_POST["firstName"]))){
-        $firstName_err = "Enter a First Name.";
-    }else{
-        $firstName = trim($_POST["firstName"]);
-    }
-    //validate last name
-        //validate first name
-        if(empty(trim($_POST["lastName"]))){
-            $lastName_err = "Enter a Last Name.";
+        }
+        if(empty(trim($_POST["username"]))){
+            $firstName_err = "Enter a username.";
         }else{
-            $lastName = trim($_POST["lastName"]);
-        }
+         $firstName = trim($_POST["username"]);
+     }
+
+        // Validate password
+          if(empty(trim($_POST["password"]))){
+            $password_err = "Please enter a password.";     
+     } elseif(strlen(trim($_POST["password"])) < 4){
+            $password_err = "Password must have atleast 4 characters.";
+     } else{
+        $password = trim($_POST["password"]);
+     }
+
+     //validate first name
+     if(empty(trim($_POST["firstName"]))){
+            $firstName_err = "Enter a First Name.";
+     }else{
+            $firstName = trim($_POST["firstName"]);
+      }
+        //validate last name
+            //validate first name
+           if(empty(trim($_POST["lastName"]))){
+              $lastName_err = "Enter a Last Name.";
+          }else{
+              $lastName = trim($_POST["lastName"]);
+          }
 
     //validate email
     if(empty(trim($_POST["email"]))){
-        $email_err = "Enter a valid Email.";
-    }else{
-        $email = trim($_POST["email"]);
-    }
-        // Check input errors before inserting in database
-        if(empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($firstName) && empty($lastName) && empty($email))
-        {
-            $sql = "INSERT INTO users (username, password, firstName, lastName, email ) VALUES (?, ?, ?, ?, ?)";
-
-            if($stmt = mysqli_prepare($link, $sql)){
-                // Bind variables to the prepared statement as parameters
-                mysqli_stmt_bind_param($stmt, "ss", $param_username, $param_password,$param_firstName,$param_lastName, $param_email);
-                $param_username = $username;
-                $param_password = $password;
-                $param_firstName = $firstName;
-                $param_lastName = $lastName;
-                $param_email = $email;
-
+            $email_err = "Enter a valid Email.";
+        }else{
+            $email = trim($_POST["email"]);
         }
     }
- 
-
-
-    
-}// end of post 
 
 
 
@@ -100,6 +137,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             echo $row['username'] . ' ' . $row['lastname'];
         }
     }
+    
 ?>
 
 <!DOCTYPE html>
@@ -120,28 +158,28 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
             <div class="form-group">
                 <label>Username</label>
-                <input type="text" name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $username; ?>">
+                <input type="text" name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $_username; ?>">
                 <span class="invalid-feedback"><?php echo $username_err; ?></span>
             </div>    
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $password; ?>">
+                <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $_password; ?>">
                 <span class="invalid-feedback"><?php echo $password_err; ?></span>
             </div>
    
             <div class="form-group">
                 <label>First Name</label>
-                <input type="text" name="firstName" class="form-control <?php echo (!empty($firstName_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $firstName; ?>">
+                <input type="text" name="firstName" class="form-control <?php echo (!empty($firstName_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $_firstName; ?>">
                 <span class="invalid-feedback"><?php echo $firstName_err; ?></span>
             </div>
             <div class="form-group">
                 <label>Last Name</label>
-                <input type="text" name="lastName" class="form-control <?php echo (!empty($lastName_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $lastName; ?>">
+                <input type="text" name="lastName" class="form-control <?php echo (!empty($lastName_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $_lastName; ?>">
                 <span class="invalid-feedback"><?php echo $lastName_err; ?></span>
             </div>
             <div class="form-group">
                 <label>Email</label>
-                <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $email; ?>">
+                <input type="email" name="email" class="form-control <?php echo (!empty($email_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $_email; ?>">
                 <span class="invalid-feedback"><?php echo $email_err; ?></span>
             </div>
             <div class="form-group">

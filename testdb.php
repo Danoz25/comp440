@@ -63,8 +63,8 @@
                 }
 
                 // finished check all parameters for registering
-                if((preg_match("/^[a-zA-Z ]*$/", $_username)) && (preg_match("/^[a-zA-Z ]*$/", $_firstName)) && (preg_match("/^[a-zA-Z ]*$/", $_lastName)) &&
-                (filter_var($_email, FILTER_VALIDATE_EMAIL)) && (preg_match("/^(?=.*\d)(?=.*[@#\-_$%^&+=§!\?])(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z@#\-_$%^&+=§!\?]{4,20}$/", $_password)))
+                if((preg_match("/^[a-zA-Z ]*$/", $username)) && (preg_match("/^[a-zA-Z ]*$/", $firstName)) && (preg_match("/^[a-zA-Z ]*$/", $lastName)) &&
+                (filter_var($email, FILTER_VALIDATE_EMAIL)) && (preg_match("/^(?=.*\d)(?=.*[@#\-_$%^&+=§!\?])(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z@#\-_$%^&+=§!\?]{4,20}$/", $password)))
                 {
 
                       // Generate random activation token
@@ -87,15 +87,17 @@
 
 
 
-        }
+             }
 
 
-        }
-        if(empty(trim($_POST["username"]))){
-            $firstName_err = "Enter a username.";
-        }else{
+        }else
+        {
+            if(empty(trim($_POST["username"]))){
+                $firstName_err = "Enter a username.";
+        }else
+        {
          $firstName = trim($_POST["username"]);
-     }
+        }
 
         // Validate password
           if(empty(trim($_POST["password"]))){
@@ -107,7 +109,7 @@
      }
 
      //validate first name
-     if(empty(trim($_POST["firstName"]))){
+        if(empty(trim($_POST["firstName"]))){
             $firstName_err = "Enter a First Name.";
      }else{
             $firstName = trim($_POST["firstName"]);
@@ -120,23 +122,17 @@
               $lastName = trim($_POST["lastName"]);
           }
 
-    //validate email
-    if(empty(trim($_POST["email"]))){
+        //validate email
+         if(empty(trim($_POST["email"]))){
             $email_err = "Enter a valid Email.";
         }else{
             $email = trim($_POST["email"]);
         }
     }
+}
 
 
 
-    $query = "SELECT username, lastname FROM COMP440_PROJECTDB";
-    $response = @mysqli_query($dbc, $query);
-    if($response){
-        while($row=mysqli_fetch_array($response)){
-            echo $row['username'] . ' ' . $row['lastname'];
-        }
-    }
     
 ?>
 

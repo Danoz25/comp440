@@ -1,15 +1,15 @@
-<?php
-//all DB host name may change based off what yours says.
-   define('DB_USER', 'comp440');
-   define('DB_PASSWORD', 'pass1234');
-   define('DB_HOST','127.0.0.1:3050');
-   define('DB_NAME','comp_440_projectdb');
 
-
-
-
-
-   $dbc = @mysqli_connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME,)
-   OR die ('Could not connect to MySQL: ' .
-    mysqli_connection_error());
+<?php 
+    // Enable us to use Headers
+    ob_start();
+    // Set sessions
+    if(!isset($_SESSION)) {
+        session_start();
+    }
+    $hostname = "127.0.0.1:3050";
+    $username = "comp440";
+    $password = "pass1234";
+    $dbname = "comp_440_projectdb";
+    
+    $connection = mysqli_connect($hostname, $username, $password, $dbname) or die("Database connection not established.")
 ?>

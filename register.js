@@ -2,7 +2,7 @@
 
 var express = require('express');
 var router = express.Router();
-var db=require('../university.sql');
+var db=require('/university.sql');
 
 function Completeregi()
 {

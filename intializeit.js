@@ -1,5 +1,6 @@
 const mysql = require('mysql');
 const express = require('express');
+const path = require('path');
 
 
 const db = mysql.createConnection({
@@ -27,6 +28,6 @@ app.get('/createdb', (req, res) => {
     });
 });
 
-app.listen('3000', () => {
-    console.log('Server Started on Port 3000')
+app.listen('3306', () => {
+    console.log('Server Started on Port 3306')
 });

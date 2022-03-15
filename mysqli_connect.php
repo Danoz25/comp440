@@ -5,6 +5,10 @@
    define('DB_HOST','127.0.0.1:3050');
    define('DB_NAME','comp_440_projectdb');
 
+   if(!isset($_SESSION)) {
+    session_start();
+}
+
 
 
 
@@ -13,13 +17,7 @@
    OR die ('Could not connect to MySQL: ' .
     mysqli_connect_error());
 
-    $query = "SELECT username, lastname FROM user";
-    $response = @mysqli_query($connection, $query);
-    if($response){
-        while($row=mysqli_fetch_array($response)){
-            echo $row['username'] . ' ' . $row['lastname'];
-        }
-    }
+
  
 
 

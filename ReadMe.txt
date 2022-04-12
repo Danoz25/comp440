@@ -5,6 +5,7 @@ then in the URL type localhost/"Fill in your Directory here"
 Either Regeister if not Regeistered
 or Login if you are Regeistered
 
+Pages to look at are Testdb.php , Login.php, 
 
 Contributed work to the project
 

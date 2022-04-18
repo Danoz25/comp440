@@ -1,5 +1,7 @@
 <?php include('mysqli_connect.php'); 
 
+$blog_id = $_GET['id'];
+
 $query = "SELECT * FROM blog ORDER BY id asc";
 $results = mysqli_query($connection, $query);
 
@@ -7,10 +9,11 @@ if($results->num_rows > 0)
 {
     while ($row = $results->fetch_assoc())
     {
-        echo " Blog date " . $row["date"] . " <a href = 'loadblogs.php?id=" . $row["id"] . "'><b>Blog subject</b></a> " . $row["subject"]; //pls work
-        
-        echo "blogID is " . $row["id"];
-        echo "<br>";
+        if ($row["id"] == $blog_id)
+        {
+            echo $row["subject"] . "<br>" . $row["username"] . "<br>" . $row["date"] . "<br>" . $row["description"];
+            echo "<br>";
+        }
     }
 }
 
@@ -21,7 +24,6 @@ if(isset($_POST['submit']))
     $date = date('Y-m-d');
     $rating = $_POST['formRating'];
     $comment_description = $_POST["formComment"];
-    $blog_id = $_GET['id'];
     $username = $_SESSION["username"];
     
     

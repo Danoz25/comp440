@@ -30,6 +30,7 @@
             
             </div>
             <button type="submit" name="submit" id="submit" class="btn btn-outline-primary btn-lg btn-block" value = "Submit">
+</div>
             </form>
         </body>
 </html>
@@ -43,7 +44,7 @@
     if(isset($_POST['submit']))
     {
         
-        $date = date("m/d/y");
+        $date = date("m.d.y");
         $subject  = $_POST["subject"];
         $username = $_SESSION["username"];
         $description = $_POST["description"];
@@ -53,15 +54,14 @@
 
         $foundTag = false;
         
-
-        $tag_check_query = mysqli_query($connection, "SELECT tag_name FROM tags");
+        
+        $tag_check_query = mysqli_query($connection, "SELECT * FROM tags");
         $tagRows = mysqli_fetch_all($tag_check_query, MYSQLI_ASSOC);
+        
 
-
-        if(!empty($subject) && !empty($description) && !empty($tag))
+        if(!empty($subject) && !empty($description) && !empty($tag_name))
         {
-            echo '<script>alert("in the if statement")</script>';
-
+            
             foreach($tagRows as $row)
             {
                 if ($tag_name == $row["tag_name"])
@@ -69,19 +69,17 @@
                     $foundTag = true;
                 }
             }
-
-            if (!$tag_name)
+            
+            if (!$foundTag)
             {
-                $sqlTag = "INSERT INTO tags (tag_name) VALUES ('{$tag_name}')";
+                $sqlTag = "INSERT INTO tags (tag_id,tag_name) VALUES ('{AUTO_INCREMENT}', '{$tag_name}')";
                 $sqlQueryTag = mysqli_query($connection, $sqlTag);
-
-                if(!$sqlQueryTag)
-                {
-                    die("MySQL tag query failed!" . mysqlierror($connection));
-                }
+            }
+            if(!$sqlQueryTag)
+            {
+                die("MySQL post query failed!" . mysqli_error($connection));
             }
             
-            echo '<script>alert("WHAT HAPPENS")</script>';
             $sql = "INSERT INTO blog (id, date, subject, username, description) VALUES ('{AUTO_INCREMENT}','{$date}','{$subject}','{$username}', '{$description}')";
                       
             // Create mysql query

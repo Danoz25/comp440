@@ -48,24 +48,14 @@
                     
                     <form method ="post">
                     <input type ="submit" name = "droptable" id ="droptable"
-                        class = "btn btn-outline-primary btn-lg btn-block" value ="Initialize DataBase!" />  </div>
+                        class = "btn btn-outline-primary btn-lg btn-block" value ="Initialize DataBase!" /> 
+                  <button type ="submit" name = "postblog" id ="postblog" 
+                        class = "btn btn-outline-primary btn-lg btn-block"><a href ="postblog.php"> Post blog! </a></button>
+                    </div>
                         </form>
                     </div>
         </div>
-        <h3>Blog Post</h3>
-        <div class="form-group">
-            <label>Subject</label>
-            <input type="text" class="form-control" name="subject" id="subject" />
-        </div>
-        <div class="form-group">
-            <label> Description</label>
-            <div></div>
-            <textarea id="description" name="description" rows = "7" style="width:100%; max_width=100%;"></textarea>
-        </div>
-        <div class="form-group">
-            <label>Tags</label>
-            <input type="tag" class="form-control" name="tag" id="tag" />
-        </div>
+
         
 
 </body>

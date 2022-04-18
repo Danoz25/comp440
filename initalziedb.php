@@ -1,4 +1,32 @@
-<?php include('mysqli_connect.php'); 
+<?php  include('mysqli_connect.php'); 
+
+
+
+        if(array_key_exists('droptable', $_POST))
+         {
+            $query = "SELECT * FROM user";
+            $results = mysqli_query($connection, $query);
+       
+            if (mysqli_num_rows($results) == 0) {
+               echo 'how many rows 0';
+       
+              // The query returned 0 rows!
+            } else {
+                echo 'how many rows';
+              // the query returned ATLEAST one row
+            }
+       
+            if (mysqli_num_rows($results) >= 5) {
+               echo 'how many rows 5';
+       
+              // the query returned more than 5 rows
+              }
+        }
+        
+
+ 
+    }
+    
 
 ?>
 <!doctype html>
@@ -25,10 +53,27 @@
                         <?php echo $_SESSION['lastname']; ?></h6>
                     <p class="card-text">Email address: <?php echo $_SESSION['email']; ?></p>
                     
-                    <button type ="droptabel" name = "droptable" id ="droptable"
-                        class = "btn btn-outline-primary btn-lg btn-block">Initialize DataBase!</button>                 </div>
-            </div>
+                    <form method ="post">
+                    <input type ="submit" name = "droptable" id ="droptable"
+                        class = "btn btn-outline-primary btn-lg btn-block" value ="Initialize DataBase!" />  </div>
+                        </form>
+                    </div>
         </div>
-    </div>
+        <h3>Blog Post</h3>
+        <div class="form-group">
+            <label>Subject</label>
+            <input type="text" class="form-control" name="subject" id="subject" />
+        </div>
+        <div class="form-group">
+            <label> Description</label>
+            <div></div>
+            <textarea id="description" name="description" rows = "7" style="width:100%; max_width=100%;"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Tags</label>
+            <input type="tag" class="form-control" name="tag" id="tag" />
+        </div>
+        
+
 </body>
-</html> 
+</html>

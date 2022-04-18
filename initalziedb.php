@@ -11,7 +11,7 @@
             {
                 while ($row = $results->fetch_assoc())
                 {
-                    echo " Blog date " . $row["date"] . " <a href = 'loadblogs.php?id=" . $row["blog_id"] . "'><b>Blog subject</b></a> " . $row["subject"]; //pls work
+                    echo " Blog date " . $row["date"] . " <a href = 'loadblogs.php?id=" . $row["id"] . "'><b>Blog subject</b></a> " . $row["subject"]; //pls work
                     echo "<br>";
                 }
             }

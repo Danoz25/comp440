@@ -7,9 +7,9 @@ if($results->num_rows > 0)
 {
     while ($row = $results->fetch_assoc())
     {
-        echo " Blog date " . $row["date"] . " <a href = 'loadblogs.php'><b>Blog subject</b></a> " . $row["subject"];
+        echo " Blog date " . $row["date"] . " <a href = 'loadblogs.php?id=" . $row["id"] . "'><b>Blog subject</b></a> " . $row["subject"]; //pls work
         
-        echo "blogID is " . $row["blog_id"];
+        echo "blogID is " . $row["id"];
         echo "<br>";
     }
 }
@@ -18,18 +18,21 @@ if($results->num_rows > 0)
 if(isset($_POST['submit']))
 {
     date_default_timezone_set('America/Los_Angeles');
-    $date = date('y-m-d', strtotime($date));
+    $date = date('Y-m-d');
     $rating = $_POST['formRating'];
     $comment_description = $_POST["formComment"];
-    $blog_id = 2; //Select * from blog where this.subject = blog.subject
+    $blog_id = $_GET['id'];
     $username = $_SESSION["username"];
-
+    
+    
     if(!empty($rating) && !empty($comment_description))
     {
-        $sql = "INSERT INTO comment (comment_id, date, pos/neg, description, blog_id, user_username) VALUES ('{AUTO_INCREMENT}', '{$date}', {$rating}', '{$comment_description}', '{$blog_id}', {$username})";
-                      
-        // Create mysql query
+        echo $rating;
+        echo $date;
+        
+        $sql = "INSERT INTO comment (comment_id, date, rating, description, blog_id, user_username) VALUES ('{AUTO_INCREMENT}', '{$date}', '{$rating}', '{$comment_description}', '{$blog_id}', '{$username}')";
         $sqlQuery = mysqli_query($connection, $sql);
+        // Create mysql query
         
         if(!$sqlQuery)
         {
@@ -53,13 +56,13 @@ if(isset($_POST['submit']))
     </head>
     <body>
     <form action="" method="post">  
-        <h3>Blog Post <?php echo $_query['subject']; ?></h3>
+        <h3>Blog Post</h3>
         <div class="form-group">
             Rate: 
             <select name="formRating">
                 <option value="Select">Select</option>
-                <option value="Positive">Positive</option>
-                <option value="Negative">Negative</option>
+                <option value="positive">positive</option>
+                <option value="negative">negative</option>
             </select>
         </div>
         <div class="form-group">

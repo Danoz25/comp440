@@ -4,14 +4,14 @@
 
         if(array_key_exists('droptable', $_POST))
          {
-            $query = "SELECT * FROM blog";
+            $query = "SELECT * FROM blog ORDER BY id asc";
             $results = mysqli_query($connection, $query);
        
             if($results->num_rows > 0)
             {
                 while ($row = $results->fetch_assoc())
                 {
-                    echo " Blog date " . $row["date"] . " <a href = 'intialziedb.php'><b>Blog subject</b></a> " . $row["subject"];
+                    echo " Blog date " . $row["date"] . " <a href = 'loadblogs.php'><b>Blog subject</b></a> " . $row["subject"];
                     echo "<br>";
                 }
             }

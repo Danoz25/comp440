@@ -11,6 +11,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     </head>
     <body>
+    <form action="" method="post">
         <h3>Blog Post</h3>
         <div class="form-group">
             <label>Subject</label>
@@ -28,8 +29,9 @@
         <div class="form-group">
             
             </div>
-            <input type="submit" name="submit" id="submit" class="btn btn-outline-primary btn-lg btn-block" value = "Submit">
-    </body>
+            <button type="submit" name="submit" id="submit" class="btn btn-outline-primary btn-lg btn-block" value = "Submit">
+            </form>
+        </body>
 </html>
 
 <?php
@@ -38,11 +40,12 @@
 
     
 
-    if(isset($_POST["submit"]))
+    if(isset($_POST['submit']))
     {
+        
         $date = date("m/d/y");
         $subject  = $_POST["subject"];
-        $username = $_POST["username"];
+        $username = $_SESSION["username"];
         $description = $_POST["description"];
         $tag_name = $_POST['tag'];
 
@@ -53,10 +56,12 @@
 
         $tag_check_query = mysqli_query($connection, "SELECT tag_name FROM tags");
         $tagRows = mysqli_fetch_all($tag_check_query, MYSQLI_ASSOC);
-                
+
 
         if(!empty($subject) && !empty($description) && !empty($tag))
         {
+            echo '<script>alert("in the if statement")</script>';
+
             foreach($tagRows as $row)
             {
                 if ($tag_name == $row["tag_name"])
@@ -65,7 +70,7 @@
                 }
             }
 
-            if (!$foundTag)
+            if (!$tag_name)
             {
                 $sqlTag = "INSERT INTO tags (tag_name) VALUES ('{$tag_name}')";
                 $sqlQueryTag = mysqli_query($connection, $sqlTag);
@@ -76,8 +81,8 @@
                 }
             }
             
-            
-            $sql = "INSERT INTO blog (date, subject, username, description) VALUES ('{$date}','{$subject}','{$username}', '{$description}')";
+            echo '<script>alert("WHAT HAPPENS")</script>';
+            $sql = "INSERT INTO blog (id, date, subject, username, description) VALUES ('{AUTO_INCREMENT}','{$date}','{$subject}','{$username}', '{$description}')";
                       
             // Create mysql query
             $sqlQuery = mysqli_query($connection, $sql);
@@ -93,7 +98,7 @@
         if(empty($subject))
         {
             $subject_error = '<div class="alert alert-danger">
-            Subject can not blank</div>';       
+            Subject can not blank</div>'; 
         }
         if(empty($description))
         {

@@ -29,7 +29,9 @@
         <div class="form-group">
             
             </div>
-            <button type="submit" name="submit" id="submit" class="btn btn-outline-primary btn-lg btn-block" value = "Submit">
+            <input type="submit" name="submit" id="submit" class="btn btn-outline-primary btn-lg btn-block" value = "Submit"></input>
+            <button type ="load" name = "loadblogs" id ="loadblogs" 
+                        class = "btn btn-outline-primary btn-lg btn-block"><a href ="initalziedb.php"> Load blogs! </a></button>
 </div>
             </form>
         </body>
@@ -45,8 +47,7 @@
     {
         
         date_default_timezone_set('America/Los_Angeles');
-        $date = date('y-m-d', strtotime($date));
-        echo $date;
+        $date = date('Y/m/d');
         $subject  = $_POST["subject"];
         $username = $_SESSION["username"];
         $description = $_POST["description"];
@@ -74,8 +75,8 @@
             
             if (!$foundTag)
             {
-                $sqlQueryTag = mysqli_query($connection, $sqlTag);
                 $sqlTag = "INSERT INTO tags (tag_id,tag_name) VALUES ('{AUTO_INCREMENT}', '{$tag_name}')";
+                $sqlQueryTag = mysqli_query($connection, $sqlTag);
             }
             
             $sql = "INSERT INTO blog (id, date, subject, username, description) VALUES ('{AUTO_INCREMENT}','{$date}','{$subject}','{$username}', '{$description}')";

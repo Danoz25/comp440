@@ -8,7 +8,33 @@ if($results->num_rows > 0)
     while ($row = $results->fetch_assoc())
     {
         echo " Blog date " . $row["date"] . " <a href = 'loadblogs.php'><b>Blog subject</b></a> " . $row["subject"];
+        
+        echo "blogID is " . $row["blog_id"];
         echo "<br>";
+    }
+}
+
+
+if(isset($_POST['submit']))
+{
+    date_default_timezone_set('America/Los_Angeles');
+    $date = date('y-m-d', strtotime($date));
+    $rating = $_POST['formRating'];
+    $comment_description = $_POST["formComment"];
+    $blog_id = 2; //Select * from blog where this.subject = blog.subject
+    $username = $_SESSION["username"];
+
+    if(!empty($rating) && !empty($comment_description))
+    {
+        $sql = "INSERT INTO comment (comment_id, date, pos/neg, description, blog_id, user_username) VALUES ('{AUTO_INCREMENT}', '{$date}', {$rating}', '{$comment_description}', '{$blog_id}', {$username})";
+                      
+        // Create mysql query
+        $sqlQuery = mysqli_query($connection, $sql);
+        
+        if(!$sqlQuery)
+        {
+            die("MySQL comment post query failed!" . mysqli_error($connection));
+        }
     }
 }
 ?>
@@ -26,19 +52,20 @@ if($results->num_rows > 0)
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     </head>
     <body>
+    <form action="" method="post">  
         <h3>Blog Post <?php echo $_query['subject']; ?></h3>
         <div class="form-group">
-            <label>Subject</label>
-            <input type="text" class="form-control" name="subject" id="subject" />
+            Rate: 
+            <select name="formRating">
+                <option value="Select">Select</option>
+                <option value="Positive">Positive</option>
+                <option value="Negative">Negative</option>
+            </select>
         </div>
         <div class="form-group">
-            <label> Description</label>
+            <label> Comment</label>
             <div></div>
-            <textarea id="description" name="description" rows = "7" style="width:100%; max_width=100%;"></textarea>
-        </div>
-        <div class="form-group">
-            <label>Tags</label>
-            <input type="tag" class="form-control" name="tag" id="tag" />
+            <textarea id="formComment" name="formComment" rows = "3" style="width:100%; max_width=100%;"></textarea>
         </div>
         <div class="form-group">
             

@@ -4,23 +4,20 @@
 
         if(array_key_exists('droptable', $_POST))
          {
-            $query = "SELECT * FROM user";
+            $query = "SELECT * FROM blog";
             $results = mysqli_query($connection, $query);
        
-            if (mysqli_num_rows($results) == 0) {
-               echo 'how many rows 0';
-       
-              // The query returned 0 rows!
-            } else {
-                echo 'how many rows';
-              // the query returned ATLEAST one row
+            if($results->num_rows > 0)
+            {
+                while ($row = $results->fetch_assoc())
+                {
+                    echo " Blog date " . $row["date"] . " <a href = 'intialziedb.php'><b>Blog subject</b></a> " . $row["subject"];
+                    echo "<br>";
+                }
             }
-       
-            if (mysqli_num_rows($results) >= 5) {
-               echo 'how many rows 5';
-       
-              // the query returned more than 5 rows
-              }
+            echo "<br>";
+            echo '<script>alert("Database was Intialized")</script>';
+            
         }
     
 

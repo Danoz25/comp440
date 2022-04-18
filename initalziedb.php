@@ -22,10 +22,6 @@
               // the query returned more than 5 rows
               }
         }
-        
-
- 
-    }
     
 
 ?>

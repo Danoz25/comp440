@@ -40,11 +40,13 @@
     include('mysqli_connect.php');
 
     
-
+    
     if(isset($_POST['submit']))
     {
         
-        $date = date("m.d.y");
+        date_default_timezone_set('America/Los_Angeles');
+        $date = date('y-m-d', strtotime($date));
+        echo $date;
         $subject  = $_POST["subject"];
         $username = $_SESSION["username"];
         $description = $_POST["description"];
@@ -72,12 +74,8 @@
             
             if (!$foundTag)
             {
-                $sqlTag = "INSERT INTO tags (tag_id,tag_name) VALUES ('{AUTO_INCREMENT}', '{$tag_name}')";
                 $sqlQueryTag = mysqli_query($connection, $sqlTag);
-            }
-            if(!$sqlQueryTag)
-            {
-                die("MySQL post query failed!" . mysqli_error($connection));
+                $sqlTag = "INSERT INTO tags (tag_id,tag_name) VALUES ('{AUTO_INCREMENT}', '{$tag_name}')";
             }
             
             $sql = "INSERT INTO blog (id, date, subject, username, description) VALUES ('{AUTO_INCREMENT}','{$date}','{$subject}','{$username}', '{$description}')";

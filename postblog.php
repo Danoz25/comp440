@@ -41,7 +41,22 @@
 
     include('mysqli_connect.php');
 
+    $username = $_SESSION["username"];
 
+
+    $sqlDateCheck = "SELECT date, username FROM blog ORDER BY asc";
+    $dateCheckResults = mysqli_query($connection, $sqlDateCheck);
+
+    if ($dateCheckResults->num_rows > 0)
+    {
+        while ($row = $dateCheckResults->fetch_assoc())
+        {
+            if ($username == $row["username"])
+            {
+                $lastPost = $row["date"];
+            }
+        }
+    }
     
     
     if(isset($_POST['submit']))
@@ -50,7 +65,6 @@
         date_default_timezone_set('America/Los_Angeles');
         $date = date('Y/m/d');
         $subject  = $_POST["subject"];
-        $username = $_SESSION["username"];
         $description = $_POST["description"];
         $tag_name = $_POST['tag'];
         $currentpost = 0;
@@ -64,7 +78,7 @@
         $tagRows = mysqli_fetch_all($tag_check_query, MYSQLI_ASSOC);
         
 
-        if($date != $date)
+        if($date != $lastPost)
         {
             $currentpost = 0;
         }

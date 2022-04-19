@@ -41,6 +41,7 @@
 
     include('mysqli_connect.php');
 
+
     
     
     if(isset($_POST['submit']))
@@ -52,6 +53,7 @@
         $username = $_SESSION["username"];
         $description = $_POST["description"];
         $tag_name = $_POST['tag'];
+        $currentpost = 0;
 
         $subject_err = $description_err = $tag_error = "";
 
@@ -62,6 +64,12 @@
         $tagRows = mysqli_fetch_all($tag_check_query, MYSQLI_ASSOC);
         
 
+        if($date != $date)
+        {
+            $currentpost = 0;
+        }
+        if($currentpost <= 2)
+        {
         if(!empty($subject) && !empty($description) && !empty($tag_name))
         {
             
@@ -80,6 +88,7 @@
             }
             
             $sql = "INSERT INTO blog (id, date, subject, username, description) VALUES ('{AUTO_INCREMENT}','{$date}','{$subject}','{$username}', '{$description}')";
+            $currentpost ++; 
                       
             // Create mysql query
             $sqlQuery = mysqli_query($connection, $sql);
@@ -88,10 +97,12 @@
             {
                 die("MySQL post query failed!" . mysqli_error($connection));
             }
-        }
+
+         }
     }
     else 
     {
+        echo '<script>alert("You have made 2 post today come back tomorrow)"</script>';
         if(empty($subject))
         {
             $subject_error = '<div class="alert alert-danger">
@@ -110,5 +121,5 @@
             </div>';
         }
     }
-
+    }
 ?>

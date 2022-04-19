@@ -24,15 +24,19 @@ if($results->num_rows > 0)
     }
 }
 
-$commentQuery = "SELECT * FROM comment ORDER BY id asc";
+$commentQuery = "SELECT * FROM comment";
 $commentResults = mysqli_query($connection, $commentQuery);
 
-if($results->num_rows > 0)
+if($commentResults->num_rows > 0)
 {
-    if ($row["blog_id"] == $blog_id)
+    while ($row = $commentResults->fetch_assoc())
     {
-        echo $row["user_username"] . "<br>Date: " . $row["date"] . "<br>Rating: " . $row["rating"] . "<br>Description: " . $row["description"];
-        echo "<br><br>";
+
+        if ($row["blog_id"] == $blog_id)
+        {
+            echo $row["user_username"] . "<br>Date: " . $row["date"] . "<br>Rating: " . $row["rating"] . "<br>Description: " . $row["description"];
+            echo "<br><br>";
+        }
     }
 }
 

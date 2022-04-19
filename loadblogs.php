@@ -1,6 +1,8 @@
 <?php include('mysqli_connect.php'); 
 
 $blog_id = $_GET['id'];
+$username = $_SESSION["username"];
+$blogOwner = false;
 
 $query = "SELECT * FROM blog ORDER BY id asc";
 $results = mysqli_query($connection, $query);
@@ -11,9 +13,26 @@ if($results->num_rows > 0)
     {
         if ($row["id"] == $blog_id)
         {
-            echo $row["subject"] . "<br>" . $row["username"] . "<br>" . $row["date"] . "<br>" . $row["description"];
+            echo $row["subject"] . "<br>User: " . $row["username"] . "<br>Date: " . $row["date"] . "<br>Description: " . $row["description"];
             echo "<br>";
+
+            if ($row["username"] == $username)
+            {
+                $blogOwner = true;
+            }
         }
+    }
+}
+
+$commentQuery = "SELECT * FROM comment ORDER BY id asc";
+$commentResults = mysqli_query($connection, $commentQuery);
+
+if($results->num_rows > 0)
+{
+    if ($row["blog_id"] == $blog_id)
+    {
+        echo $row["user_username"] . "<br>Date: " . $row["date"] . "<br>Rating: " . $row["rating"] . "<br>Description: " . $row["description"];
+        echo "<br><br>";
     }
 }
 
@@ -24,10 +43,13 @@ if(isset($_POST['submit']))
     $date = date('Y-m-d');
     $rating = $_POST['formRating'];
     $comment_description = $_POST["formComment"];
-    $username = $_SESSION["username"];
     
     
-    if(!empty($rating) && !empty($comment_description))
+    if ($blogOwner)
+    {
+        echo '<script>alert("You cannot comment on your own blog!")</script>';
+    }
+    else if(!empty($rating) && !empty($comment_description))
     {
         echo $rating;
         echo $date;

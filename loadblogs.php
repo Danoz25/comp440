@@ -80,7 +80,7 @@ if(isset($_POST['submit']))
     </head>
     <body>
     <form action="" method="post">  
-        <h3>Blog Post</h3>
+        <h3>Rate my Blog</h3>
         <div class="form-group">
             Rate: 
             <select name="formRating">
@@ -98,5 +98,7 @@ if(isset($_POST['submit']))
             
             </div>
             <input type="submit" name="submit" id="submit" class="btn btn-outline-primary btn-lg btn-block" value = "Submit">
+            <button type ="Loadblogs" name = "loadblog" id ="loadblog" 
+                        class = "btn btn-outline-primary btn-lg btn-block"><a href ="initalziedb.php"> Load blog! </a></button>
     </body>
 </html>

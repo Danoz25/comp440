@@ -42,9 +42,10 @@
     include('mysqli_connect.php');
 
     $username = $_SESSION["username"];
+    $lastPost = "";
 
 
-    $sqlDateCheck = "SELECT date, username FROM blog ORDER BY asc";
+    $sqlDateCheck = "SELECT date, username FROM blog ORDER BY date asc";
     $dateCheckResults = mysqli_query($connection, $sqlDateCheck);
 
     if ($dateCheckResults->num_rows > 0)
@@ -102,10 +103,11 @@
             }
             
             $sql = "INSERT INTO blog (id, date, subject, username, description) VALUES ('{AUTO_INCREMENT}','{$date}','{$subject}','{$username}', '{$description}')";
-            $currentpost ++; 
+         
                       
             // Create mysql query
             $sqlQuery = mysqli_query($connection, $sql);
+            $currentpost++;
             
             if(!$sqlQuery)
             {

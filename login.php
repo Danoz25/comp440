@@ -92,6 +92,7 @@
                         $userPwdErr = '<div class="alert alert-danger">
                                 Either email or password is incorrect.
                             </div>';
+                            //add a alert box here
                     }
                 } 
         } else {

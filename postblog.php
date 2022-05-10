@@ -33,6 +33,7 @@
             <button type ="load" name = "loadblogs" id ="loadblogs" 
                         class = "btn btn-outline-primary btn-lg btn-block"><a href ="initalziedb.php"> Load blogs! </a></button>
 </div>
+
             </form>
         </body>
 </html>

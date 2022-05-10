@@ -19,6 +19,29 @@
             echo '<script>alert("Database was Intialized")</script>';
             
         }
+        
+        if(array_key_exists('number1', $_POST))
+        {
+        
+           $query = "SELECT DISTINCT blog.subject, blog.description, comment.rating
+           FROM blog
+           INNER JOIN comment ON blog.blog_id = comment.blog_id
+           WHERE blog.username = 'test3' # Input username value
+           AND rating = 'positive'";
+            $results = mysqli_query($connection, $query);
+            if($results->num_rows > 0)
+            {
+                echo "List all the blogs of user X, such that all the comments are positive for these blogs. ";
+                while ($row = $results->fetch_assoc())
+                {
+                    echo "<br>";
+                    echo $row["subject"] . " " .  $row["rating"];
+
+                }
+
+            }
+
+        }
 
         if(array_key_exists('number2', $_POST))
         {
@@ -31,9 +54,9 @@
             $results = mysqli_query($connection, $query);
             if($results->num_rows > 0)
             {
+                echo "List all the blogs of user X, such that all the comments are positive for these blogs. ";
                 while ($row = $results->fetch_assoc())
                 {
-                    echo "List all the blogs of user X, such that all the comments are positive for these blogs. ";
                     echo "<br>";
                     echo $row["subject"] . " " .  $row["rating"];
 
@@ -54,6 +77,8 @@
             $results = mysqli_query($connection, $query);
             if($results->num_rows > 0)
             {
+                echo "List the users who posted the most number of blogs on 5/1/2022; if there is a tie, 
+                list all the users who have a tie. ";
                 while ($row = $results->fetch_assoc())
                 {
                 
